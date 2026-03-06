@@ -1,0 +1,28 @@
+name: BigQuery Deployment
+
+on:
+  push:
+    branches:
+      - qa
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Authenticate to GCP
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+    - name: Setup gcloud
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Run BigQuery SQL
+      run: |
+        bq query --use_legacy_sql=false < sql/copy_customers.sql
