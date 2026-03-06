@@ -25,4 +25,8 @@ jobs:
 
     - name: Run BigQuery SQL
       run: |
-        bq query --use_legacy_sql=false < sql/copy_customers.sql
+        for file in sql/*.sql
+        do
+          echo "Running $file"
+          bq query --use_legacy_sql=false < $file
+        done
